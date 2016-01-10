@@ -1,0 +1,12 @@
+<h1>Стихи пушкина</h1>
+
+<table>
+
+  <tbody>
+    <% @verses.each do |verse| %>
+      <tr>
+        <td><%= verse.title %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
