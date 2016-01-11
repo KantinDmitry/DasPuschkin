@@ -38,12 +38,12 @@ class Task5Worker
     line.length.times do |i|
       @space_index = i if question[i] == ' '
       if question[i] != line[i] then
-        @start_index = @space_index + 1
+        @start_index = @space_index
         break
       end
     end
-    correct_word = line[@start_index..-1].split[0].gsub(/[,\.!\?]/, '')
-    incorrect_word = question[@start_index..-1].split[0].gsub(/[,\.!\?]/, '')
+    correct_word = line[@start_index..-1].split[0].gsub(/[,\.!\?]/, '').strip
+    incorrect_word = question[@start_index..-1].split[0].gsub(/[,\.!\?]/, '').strip
     [correct_word,incorrect_word]
   end
 
