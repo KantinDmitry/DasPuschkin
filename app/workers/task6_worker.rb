@@ -15,7 +15,7 @@ class Task6Worker
 
     if request_result then
       answer = request_result.text.match(pattern).to_s
-      answer.gsub('—','-')
+      answer = answer.gsub('—','-')
     else
       answer = 'not found'
     end
