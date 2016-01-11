@@ -3,6 +3,7 @@ class QuizController < ApplicationController
   protect_from_forgery with: :null_session
 
   def post
+    render nothing: true
     token = '4e2b7974ca25f48a8ae26ca89b8f27ae'
 
     task_id = params[:id]
@@ -30,6 +31,5 @@ class QuizController < ApplicationController
     else
       puts "Task lvl #{task_level} not supported. Question: #{task_question}"
     end
-    render nothing: true
   end
 end

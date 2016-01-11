@@ -25,6 +25,8 @@ class Task6Worker
       token: token,
       task_id: task_id
     }
+    # TODO: DELETE THIS SHIT (delay)
+    sleep(0.090)
     server_answer = Net::HTTP.post_form(uri, answer_params)
     puts "QUIZ lvl 6. Question: {#{question}};\tanswer: {#{answer}};  #{server_answer.class} - #{server_answer.body}"
   end
