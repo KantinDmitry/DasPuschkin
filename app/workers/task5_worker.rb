@@ -4,7 +4,6 @@ class Task5Worker
   # sidekiq_options :retry => false
 
   def perform(question, token, task_id)
-    # question = Regexp.escape question
     @token = token
     @task_id = task_id
     replasements = replace_each_word Regexp.escape(question)

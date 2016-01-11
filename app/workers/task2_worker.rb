@@ -12,8 +12,11 @@ class Task2Worker
       word_start_index = question.index '%WORD%'
       text_after_WORD = question[(word_start_index + 6)..-1]
       word_end_index = text.index text_after_WORD, word_start_index
-      word_end_index = -1 if text_after_WORD.empty?
-      answer = text[word_start_index...word_end_index]
+      if text_after_WORD.empty? then
+        answer = text[word_start_index..-1]
+      else
+        answer = text[word_start_index...word_end_index]
+      end
     else
       answer = 'not found'
     end
