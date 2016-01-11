@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  line: MyString
+  letters: MyString
+  letters_hash: 1
+  length: 1
+
+two:
+  line: MyString
+  letters: MyString
+  letters_hash: 1
+  length: 1

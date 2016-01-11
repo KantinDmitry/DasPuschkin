@@ -8,6 +8,9 @@
 
 require 'json'
 
+LineHash.delete_all
+Verse.delete_all
+
 verses_file = File.open('verses.json', 'r')
 verses_hash = JSON.parse verses_file.read
 verses_file.close
@@ -18,4 +21,15 @@ verses_hash.each do |title, text|
   title = title.delete " "
   text = text.delete " "
   Verse.create title: title, text: text
+end
+
+Verse.all.each do |verse|
+  verse.text.split("\n").each do |line|
+    letters = line.chars - ['.', ',', ':', ';', ':', '«', '»', '–', '—', '!', '?', '-', '"', '(', ')', ' ']
+    letters = letters.sort
+    letters = letters.join
+    letters_hash = 0
+    letters.each_byte { |byte| letters_hash = letters_hash + byte }
+    LineHash.create line: line, letters: letters, letters_hash: letters_hash, length: letters.length
+  end
 end

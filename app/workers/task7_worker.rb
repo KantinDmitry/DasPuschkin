@@ -4,15 +4,12 @@ class Task7Worker
   # sidekiq_options :retry => false
 
   def perform(question, token, task_id)
-    words_count = question.count(' ') + 1
-    symbols = question.delete(' ').split('').uniq.sort.join
+    request_string = question.delete ' '
+    request_string = request_string.split('').sort.join
+    result = LineHash.where("letters LIKE ?", "%#{request_string}%").limit(1)[0]
 
-    find_line symbols, words_count
-    find_line(symbols, words_count + 1) unless @line_is_matching
-    find_line(symbols, words_count - 1) unless @line_is_matching
-
-    if @line_is_matching then
-      answer = @verse_line
+    if result then
+      answer = result.line
     else
       answer = 'not found'
     end
@@ -25,19 +22,5 @@ class Task7Worker
     }
     server_answer = Net::HTTP.post_form(uri, answer_params)
     puts "QUIZ lvl 7. Question: {#{question}};\tanswer: {#{answer}}; #{server_answer.class} - #{server_answer.body}"
-  end
-
-  def find_line(symbols, words_count)
-    return if words_count == 0
-    pattern = "\n([#{symbols}]+[ \.,–—!\?;:«»]+){#{words_count-1}}" if words_count > 1
-    pattern = "\n" unless words_count > 1
-    pattern = "#{pattern}[#{symbols}]+[ \"\.,\-–—!\?;:«»]*\n"
-    request_result = Verse.where("text ~ ?", pattern)
-
-    request_result.each do |verse|
-      @verse_line = verse.text.match(pattern).to_s.strip
-      @line_is_matching = @verse_line.chars.uniq.sort.join.index symbols
-      break if @line_is_matching
-    end
   end
 end

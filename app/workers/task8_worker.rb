@@ -6,29 +6,26 @@ class Task8Worker
   def perform(question, token, task_id)
     letters = question.delete(' ')
     return if question.empty?
+    letters_hash = 0
+    letters.each_byte { |byte| letters_hash = letters_hash + byte }
 
-    Verse.all.each do |verse|
-      verse.text.split("\n").each do |line|
-        if compare_lines line, letters then
-          line = line[0...-2] if line.end_with?(' —')
-          Thread.new { async_post line, token, task_id, question }
-        end
+    LineHash.where(letters_hash: [(letters_hash - 100)..(letters_hash + 100)], length: letters.length).each do |line_hash|
+      if compare_lines(line_hash.letters, letters) then
+        line = line_hash.line
+        line = line[0...-2] if line.end_with?(' —')
+        Thread.new { async_post line, token, task_id, question }
       end
     end
-    puts "QUIZ lvl 8; question: #{question}"
+    nil
   end
 
   def compare_lines(line, letters)
-    return false if letters.length > line.length
-    line_array = line.chars - ['.', ',', ':', ';', ':', '«', '»', '–', '—', '!', '?', '-', '"', ' ', '(', ')']
-    if line_array.count == letters.length then
-      letters.chars.each do |char|
-        delete_index = line_array.find_index(char)
-        line_array.delete_at(delete_index) if delete_index
-      end
-      return true if line_array.count < 3
+    line_array = line.chars
+    letters.chars.each do |char|
+      delete_index = line_array.find_index(char)
+      line_array.delete_at(delete_index) if delete_index
     end
-    false
+    (line_array.count < 2)? true : false
   end
 
   def async_post(answer, token, task_id, question)

@@ -11,10 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151221162009) do
+ActiveRecord::Schema.define(version: 20160111134643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "line_hashes", force: :cascade do |t|
+    t.string   "line"
+    t.string   "letters"
+    t.integer  "letters_hash"
+    t.integer  "length"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "verses", force: :cascade do |t|
     t.string   "title"
