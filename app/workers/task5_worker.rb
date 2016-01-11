@@ -34,9 +34,11 @@ class Task5Worker
 
   def find_difference question, line
     @start_index = 0
+    @space_index = 0
     line.length.times do |i|
+      @space_index = i if question[i] == ' '
       if question[i] != line[i] then
-        @start_index = i
+        @start_index = @space_index + 1
         break
       end
     end
